@@ -10,12 +10,18 @@ import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 
 import { FlashMessagesModule } from 'angular2-flash-messages';
+import { LoginComponent } from './login/login.component';
+import { RegisterComponent } from './register/register.component';
+import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     CoursesComponent,
-    NavbarComponent
+    NavbarComponent,
+    LoginComponent,
+    RegisterComponent,
+    PageNotFoundComponent
   ],
   imports: [
     BrowserModule,
