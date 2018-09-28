@@ -9,6 +9,8 @@ import { NavbarComponent } from './navbar/navbar.component';
 import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 
+import { FlashMessagesModule } from 'angular2-flash-messages';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -19,7 +21,8 @@ import { HttpModule } from '@angular/http';
     BrowserModule,
     AppRoutingModule,
     FormsModule,
-    HttpModule
+    HttpModule,
+    FlashMessagesModule.forRoot()
   ],
   providers: [],
   bootstrap: [AppComponent]

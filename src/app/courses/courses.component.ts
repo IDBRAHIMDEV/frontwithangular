@@ -1,5 +1,6 @@
 import { CourseService } from './../course.service';
 import { Component, OnInit } from '@angular/core';
+import { FlashMessagesService } from 'angular2-flash-messages';
 
 @Component({
   selector: 'app-courses',
@@ -8,12 +9,15 @@ import { Component, OnInit } from '@angular/core';
 })
 export class CoursesComponent implements OnInit {
 
-  constructor(public courseService: CourseService) { }
+  constructor(public courseService: CourseService,
+    public messageService: FlashMessagesService
+    ) { }
   
   ngOnInit() {
     this.listCourses();
   }
 
+  operation = true;
   etat = false;
   
   course = {
@@ -25,22 +29,28 @@ export class CoursesComponent implements OnInit {
     isPublished: false
   }
 
-  courses = [
-    {id: 1, name: "Formation en AdonisJS", author: "Mehdi EL JAZOULI", price: 1300, isPublished: true, category: "Web"},
-    {id: 2, name: "Formation en SailsJS", author: "Mohamed SAYKOUK", price: 900, isPublished: false, category: "Mobile"},
-    {id: 3, name: "Formation en MoaJS", author: "Walid BOUDAD", price: 100, isPublished: false, category: "Web"},
-    {id: 4, name: "Formation en Angular", author: "Ayoub BOUDAD", price: 350, isPublished: true, category: "Mobile"},
-    {id: 5, name: "Formation en ReactJS", author: "Younes BOUSSETTA", price: 500, isPublished: false, category: "Mobile"},
-    {id: 6, name: "Formation en lARAVEL", author: "Asmae ELABID", price: 400, isPublished: true, category: "Web"},
-  ]
+  courses = []
 
   setEtat() {
+    this.course = {
+      id: 0,
+      name: "",
+      author: "",
+      price: 0,
+      category: "",
+      isPublished: false
+    }
+    this.operation = true;
     this.etat = !this.etat;
   }
 
   addCourse() {
+    
+    this.courseService.saveCourse(this.course).subscribe(res => {
+      this.courses.unshift(res.json())
 
-    this.courses.unshift(this.course);
+      this.messageService.show('this course is added successfully...', {cssClass: 'alert-success', timeout: 3000})
+    })
     this.course = {
       id: 0,
       name: "",
@@ -49,18 +59,46 @@ export class CoursesComponent implements OnInit {
       category: "",
       isPublished: false
     } 
-
     this.etat = false;
   }
 
   listCourses() {
     this.courseService.getCourses().subscribe((courses) => {
-      console.log(courses);
+      this.courses = courses.json();
     })
   }
 
-  deleteCourse(i) {
-    this.courses.splice(i, 1);
+  removeCourse(i, id) {
+    console.log(i, '-', id);
+    this.courseService.deleteCourse(id).subscribe(res => {
+      console.log(res.json());
+      this.courses.splice(i, 1);
+    })
+   
+  }
+
+  editCourse(course) {
+    this.operation = false
+    this.course = course;
+    this.etat = true;
+  }
+
+  updateCourse() {
+    this.courseService.setCourse(this.course).subscribe(res => {
+      console.log(res.json())
+
+      this.course = {
+        id: 0,
+        name: "",
+        author: "",
+        price: 0,
+        category: "",
+        isPublished: false
+      } 
+      
+      this.operation = true;
+      this.etat = false;
+    }) 
   }
 
 }

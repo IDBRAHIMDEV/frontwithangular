@@ -29,7 +29,9 @@
 
     <input type="checkbox" [(ngModel)]="course.isPublished">
     
-    <button (click)="addCourse()" class="btn btn-primary btn-block">Add</button>
+    <button *ngIf="operation" (click)="addCourse()" class="btn btn-primary btn-block">Add</button>
+    <button *ngIf="!operation" (click)="updateCourse()" class="btn btn-danger btn-block">update</button>
+
   </div>
 </div>
 
@@ -48,15 +50,15 @@
       </thead>
       <tbody>
         <tr *ngFor="let course of courses; index as i">
-          <td>{{ course.name }}</td>
+          <td>{{ course.name | uppercase }}</td>
           <td>{{ course.author }}</td>
-          <td>{{ course.price }}</td>
+          <td>{{ course.price | currency }}</td>
           <td>{{ course.category }}</td>
-          <td>
-            <button class="btn btn-sm btn-warning mr-1">
+          <td nowrap>
+            <button (click)="editCourse(course)" class="btn btn-sm btn-warning mr-1">
               <i class="fa fa-pencil"></i>
             </button>
-            <button (click)="deleteCourse(i)" class="btn btn-sm btn-danger">
+            <button (click)="removeCourse(i, course._id)" class="btn btn-sm btn-danger">
               <i class="fa fa-trash"></i>
             </button>
           </td>
